@@ -1,0 +1,107 @@
+Piece(object, column, row, shape) Class:
+ The Piece class is used to create an object that represents a single piece in a game of Tetris. It stores information about the piece's position (column and row), shape, color, and rotation. The class also defines two class variables (rows and columns) that represent the size of the game board.
+
+create_grid(locked_positions=None) Function:
+ The function create_grid() takes an optional argument locked_positions which is a dictionary of coordinates and color values. If locked_positions is not provided, it defaults to an empty dictionary.
+ The function then creates a 20x10 grid of 3-tuples representing color values. It then iterates through each row and column of the grid and checks if the corresponding coordinate is in the locked_positions dictionary. If it is, it sets the color of the grid at that coordinate to the value in the dictionary.
+ Finally, the function returns the grid.
+
+convert_shape_format(shape) Function:
+ 1. It takes in a shape object and extracts the shape's rotation and format.
+ 2. It iterates through the format and looks for positions with a '0' value.
+ 3. If a '0' is found, it adds the corresponding position to the positions list.
+ 4. Finally, it adjusts the positions by subtracting two from the x-coordinate and four from the y-coordinate. This is done to align the shape with the game board.
+
+valid_space(shape, grid) Function:
+ The first line of code is creating a list of accepted positions, which are the (x, y) coordinates on the grid where the shape can be placed. This is done by looping through the grid and adding the coordinates of each black cell to the accepted positions list.
+ The second line of code is converting the shape into a format that can be used to check if it is valid. This is done by looping through the shape and adding the coordinates of each black cell to the formatted list.
+ The third line of code is looping through the formatted list and checking if each coordinate is in the accepted positions list. If it is not, then the shape is not valid and the function returns False. Otherwise, the function returns True.
+
+check_lost(positions) Function:
+ The function check_lost() takes in a list of positions as its argument. It then iterates through the list of positions and checks the y coordinate of each one. If any of the y coordinates are less than 1, it returns True, indicating that the game has been lost. Otherwise, it returns False, indicating that the game has not been lost.
+
+get_shape() Function:
+ 1. The function get_shape() is defined.
+ 2. The global variables shapes and shape_colors are imported.
+ 3. The function returns a Piece object with a random shape chosen from shapes.
+
+draw_text_middle(text, size, color, surface) Function:
+ The draw_text_middle function takes four parameters: text, size, color, and surface. It first creates a font object using the pygame.font module and sets the font to 'comicsans' with a size of the parameter size and bold set to True. Then, it renders the text with the given color and stores it in the label variable. Finally, it blits the label onto the surface at the middle of the play area by calculating the top left x and y coordinates, and then offsetting by half the width and height of the label.
+
+draw_grid(surface, row, col) Function:
+ It takes in a surface and two integers (row and col) as parameters. It then creates two variables, sx and sy, which are used to store the starting x and y coordinates of the grid.
+ It then uses a for loop to draw horizontal lines across the surface. The loop iterates over the row parameter and draws a line from the starting x coordinate to the end of the play area, with each line spaced 30 pixels apart.
+ Finally, it uses a nested for loop to draw vertical lines across the surface. The loop iterates over the col parameter and draws a line from the starting y coordinate to the end of the play area, with each line spaced 30 pixels apart.
+
+clear_rows(grid, locked) Function:
+ 1. Looping through each row in the grid from bottom to top
+ 2. Checking if the row contains only (0, 0, 0) elements
+ 3. If the row is full, incrementing the "inc" variable
+ 4. Deleting the positions of the full row from the locked dictionary
+ 5. Looping through the locked dictionary and shifting any positions above the full row down by the value of "inc"
+
+draw_next_shape(shape, surface) Function:
+ This function draws the next shape that will be used in the game. It takes in two parameters, the shape and the surface. First, it creates a font object and then renders a label for the next shape. It then calculates the starting x and y coordinates for the shape. It then iterates through the shape's format and draws a rectangle for each 0 in the format. Finally, it displays the label at the top of the shape.
+
+draw_window(surface) Function:
+ The draw_window() function is responsible for drawing the window. It takes in a surface as a parameter and sets the background to black. It then draws the Tetris title using the pygame.font.SysFont() function.
+ Next, it draws the grid by looping through the grid array and drawing a rectangle for each element. After that, it draws the grid and border using the draw_grid() function. Finally, it draws a red border around the play area.
+
+main() Function:
+ The main() function is the main game loop. It creates a grid, and then sets up some variables to track the current piece, the next piece, the fall time, the level time, and the fall speed. It also sets up a score variable. 
+ The loop then checks for user input, and moves the current piece accordingly. If the piece hits the ground, it is added to the locked positions, and a new piece is generated. The loop also checks for cleared rows, and updates the score accordingly. Finally, the window is redrawn, and the loop checks to see if the user has lost. If they have, the game ends.
+
+main_menu() Function:
+ The main_menu() function is used to display a menu to the user. It uses a while loop to keep the menu running until the user quits the game. Inside the loop, it draws the text "Press any key to begin" onto the window and then updates the display. Finally, it checks for any key presses and if one is detected, it calls the main() function. If the user quits the game, the loop ends and the program quits.
+
+
+Code Explanation:
+ We're creating a list of lists for each of the shapes that we'll be using in our game. Each shape is represented by a list of 5 strings, each string representing a row in the shape. The 0s represent the blocks that will be colored in. 
+ We're also creating a list of colors that will be associated with each shape. The index of the color in the list will match the index of the shape in the shapes list.
+ We're also defining some global variables that will be used throughout the game. The play_width and play_height variables define the size of the playing area. The block_size variable defines the size of each block in the grid. The top_left_x and top_left_y variables define the x and y coordinates of the top left corner of the playing area.
+ class Piece(object):
+    def __init__(self, x, y, shape):
+        self.x = x
+        self.y = y
+        self.shape = shape
+        self.color = shape_colors[shapes.index(shape)]
+        self.rotation = 0
+ This is the class for our pieces. It takes in 3 parameters: x and y coordinates for the position of the piece, and a shape. We also define the color of the piece based on the index of the shape in the shapes list. We also define the initial rotation of the piece to be 0.
+ def create_grid(locked_positions={}):
+    grid = [[(0,0,0) for x in range(10)] for x in range(20)]
+     for i in range(len(grid)):
+        for j in range(len(grid[i])):
+            if (j,i) in locked_positions:
+                c = locked_positions[(j,i)]
+                grid[i][j] = c
+    return grid
+ This is the function for creating the grid. It takes in a dictionary of locked positions as a parameter. We create a 10x20 grid, with each block having a color of (0, 0, 0) (black). We then loop through the dictionary of locked positions and change the color of the blocks in the grid if they are in the dictionary.
+ def convert_shape_format(shape):
+    positions = []
+    format = shape.shape[shape.rotation % len(shape.shape)]
+     for i, line in enumerate(format):
+        row = list(line)
+        for j, column in enumerate(row):
+            if column == '0':
+                positions.append((shape.x + j, shape.y + i))
+     for i, pos in enumerate(positions):
+        positions[i] = (pos[0] - 2, pos[1] - 4)
+     return positions
+ This is the function for converting the shape format. It takes in a shape as a parameter. We create an empty list for the positions. We then get the format of the shape based on its rotation and loop through the format. If a block is present, we add its position to the list. We then subtract 2 from the x coordinate and 4 from the y coordinate of each position in the list. This is done so that the top left corner of the shape is at the origin (0, 0).
+ def valid_space(shape, grid):
+    accepted_positions = [[(j, i) for j in range(10) if grid[i][j] == (0,0,0)] for i in range(20)]
+    accepted_positions = [j for sub in accepted_positions for j in sub]
+    formatted = convert_shape_format(shape)
+     for pos in formatted:
+        if pos not in accepted_positions:
+            if pos[1] > -1:
+                return False
+     return True
+ This is the function for checking if a space is valid. It takes in a shape and the grid as parameters. We create a list of positions in the grid that are empty (black). We then convert the shape format and loop through it. If a position in the shape format is not in the list of accepted positions, we check if the y coordinate of the position is greater than -1. If it is, then the space is not valid and we return False. Otherwise, we return True.
+ def check_lost(positions):
+    for pos in positions:
+        x, y = pos
+        if y < 1:
+            return True
+    return False
+ This is the function for checking if the game is lost. It takes in a list of positions as a parameter. We loop through the list and check if the y coordinate of any of the positions is less than 1. If it is, then the game is lost and we return True. Otherwise, we return False.
